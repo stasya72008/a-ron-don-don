@@ -4,6 +4,7 @@ venv/
 .idea/
 *.log
 *.db
+*.csv
 config.ini
 
 # Distribution / packaging

@@ -1,9 +1,11 @@
 import sqlite3
 
-connect = sqlite3.connect('base.db')
+path_database = "base.db"
+
+connect = sqlite3.connect(path_database)
 cursor = connect.cursor()
 
-_view_data = (
+view_data = (
     'Number',
     'Name',
     'Link',
@@ -41,7 +43,7 @@ def create_bd():
 def insert_into_table(
         number, name, link=None, price=None,
         profile=None, information=None):
-    data = dict(zip(_view_data,
+    data = dict(zip(view_data,
                     [number, name, link, price, profile, information]))
 
     cols = ', '.join("'{}'".format(col) for col in data.keys())
@@ -77,3 +79,19 @@ def is_not_phone_exists(phone):
     sql = "SELECT Number FROM people WHERE Number is '{}';".format(phone)
     resp = _exe_raw_sql(sql)
     return not any(resp)
+
+
+# For example
+# create_bd()
+# insert_into_table('+34567890', 'Abbu', 'url1')
+# insert_into_table('+345678901', 'Abbu1', 'url2')
+# insert_into_table('+345678902', 'Abbu2', 'url3')
+# insert_into_table('+3456789025', 'Abbu2', 'https://e.mail.ru/messages/folder/5/')
+# insert_into_table('+3456789026', 'Abbu2', 'https://e.mail.ru/messages/folder/6/')
+# insert_into_table('+345678902266', 'Abbu2', 'https://e.mail.ru/messages/folder/6/', \
+                  # '30 800 &', 'https://e.mail.ru/messages', 'bla bla')
+
+# print filter_by_links(['1', 'url1', '2', 'url3', 'https://e.mail.ru/messages/folder/5/'])
+# print is_not_phone_exists('+345678901')
+# print is_not_phone_exists('+3456789')
+# print get_all()
