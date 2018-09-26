@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+venv/
+.idea/
+*.log
+*.db
+*.csv
+config.ini
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
