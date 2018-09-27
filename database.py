@@ -63,9 +63,9 @@ def get_all():
 
 #  Filters
 def filter_by_links(links):
-    """links should be list, Return List of links for processing"""
+    """links should be set, Return Set of links for processing"""
 
-    assert isinstance(links, list)
+    assert isinstance(links, set)
 
     sql = "SELECT Link FROM people WHERE Link in ({});".format(
         ', '.join(["'{}'".format(item) for item in links]))
