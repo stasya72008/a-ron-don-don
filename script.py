@@ -1,7 +1,8 @@
 from selenium import webdriver
 
 from constants import *
-from database import *
+from database import create_bd, filter_by_links, insert_into_table, \
+    is_not_phone_exists
 
 # prepare_db()
 
@@ -50,12 +51,5 @@ for link in all_links_list:
             info_line = driver.find_element_by_class_name(USER_SINCE_CLASS).text
 
             insert_into_table(phone_number, user_name, link, price, profile_link, info_line)
-
-            print link
-            print profile_link
-            print phone_number
-            print user_name
-            print price
-            print info_line
 
 driver.close()
