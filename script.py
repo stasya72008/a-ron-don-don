@@ -1,14 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as expect
 
 from constants import *
 from waiters import element_has_attribute
 from database import create_bd, filter_by_links, insert_into_table, \
     is_not_phone_exists
-
-# prepare_db()
 
 # firefox_profile = webdriver.FirefoxProfile()
 # firefox_profile.set_preference("browser.privatebrowsing.autostart", True)
@@ -46,10 +43,7 @@ for link in all_links_list:
     show_phone_number = driver.find_elements_by_css_selector(SHOW_PHONE_NUMBER_CSS)
     if show_phone_number:
         show_phone_number[1].click()
-        # Todo: add 2+ numbers case
-        if show_phone_number[1].get_attribute('style') == PHONE_NUMBER_VISIBLE:
-            phone_number = driver.find_elements_by_css_selector(PHONE_NUMBER_CSS)[1].text
-        else:
+        if show_phone_number[1].get_attribute('style') != PHONE_NUMBER_VISIBLE:
             WebDriverWait(driver, 10).until(element_has_attribute(
                 (By.CSS_SELECTOR, SHOW_PHONE_NUMBER_CSS), 'style', PHONE_NUMBER_VISIBLE))
             phone_number = driver.find_elements_by_css_selector(PHONE_NUMBER_CSS)[1].text
@@ -57,7 +51,7 @@ for link in all_links_list:
         if is_not_phone_exists(phone_number):
             profile_link = driver.find_element_by_css_selector(USER_NAME_CSS).get_attribute('href')
             user_name = driver.find_element_by_css_selector(USER_NAME_CSS).text.strip()
-            price = driver.find_element_by_css_selector('.price-label strong').text
+            price = driver.find_element_by_css_selector(PRICE_CSS).text
             info_line = driver.find_element_by_class_name(USER_SINCE_CLASS).text
 
             insert_into_table(phone_number, user_name, link, price, profile_link, info_line)
