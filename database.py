@@ -11,7 +11,8 @@ view_data = (
     'Link',
     'Price',
     'Profile',
-    'Information')
+    'Information',
+    'Address')
 
 
 def _exe_raw_sql(sql):
@@ -34,6 +35,7 @@ def create_bd():
         Price VARCHAR(255),
         Profile VARCHAR(255),
         Information VARCHAR(255),
+        Address VARCHAR(255),
         CONSTRAINT unique_local UNIQUE (Number)
         );
     """
@@ -42,9 +44,9 @@ def create_bd():
 
 def insert_into_table(
         number, name, link=None, price=None,
-        profile=None, information=None):
+        profile=None, information=None, address=None):
     data = dict(zip(view_data,
-                    [number, name, link, price, profile, information]))
+                    [number, name, link, price, profile, information, address]))
 
     cols = ', '.join("'{}'".format(col) for col in data.keys())
     vals = ', '.join(':{}'.format(col) for col in data.keys())

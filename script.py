@@ -44,7 +44,7 @@ for link in all_links_list:
     if show_phone_number:
         show_phone_number[1].click()
         if show_phone_number[1].get_attribute('style') != PHONE_NUMBER_VISIBLE:
-            WebDriverWait(driver, 10).until(element_has_attribute(
+            WebDriverWait(driver, 20).until(element_has_attribute(
                 (By.CSS_SELECTOR, SHOW_PHONE_NUMBER_CSS), 'style', PHONE_NUMBER_VISIBLE))
             phone_number = driver.find_elements_by_css_selector(PHONE_NUMBER_CSS)[1].text
 
@@ -53,7 +53,9 @@ for link in all_links_list:
             user_name = driver.find_element_by_css_selector(USER_NAME_CSS).text.strip()
             price = driver.find_element_by_css_selector(PRICE_CSS).text
             info_line = driver.find_element_by_class_name(USER_SINCE_CLASS).text
+            user_address = driver.find_element_by_css_selector(USER_ADDRESS_CSS).text
 
-            insert_into_table(phone_number, user_name, link, price, profile_link, info_line)
+            insert_into_table(phone_number, user_name, link, price, profile_link, info_line,
+                              user_address)
 
 driver.close()
