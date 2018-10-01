@@ -14,7 +14,15 @@ view_data = (
     'Information',
     'Address')
 
+view_data_telegram = (
+    'Id_external',
+    'Number',
+    'Name',
+    'Seen',
+    'Profile')
 
+
+# Common
 def _exe_raw_sql(sql):
     try:
         cursor.execute(sql)
@@ -26,6 +34,8 @@ def _exe_raw_sql(sql):
     return fetchall
 
 
+# People
+# ToDo add Id AUTOINCREMENT
 def create_bd():
     sql = """
     CREATE TABLE if not exists people(
@@ -63,7 +73,7 @@ def get_all():
     return _exe_raw_sql(sql)
 
 
-#  Filters
+#  Filters People
 def filter_by_links(links):
     """links should be set, Return Set of links for processing"""
 
@@ -83,17 +93,49 @@ def is_not_phone_exists(phone):
     return not any(resp)
 
 
-# For example
-# create_bd()
-# insert_into_table('+34567890', 'Abbu', 'url1')
-# insert_into_table('+345678901', 'Abbu1', 'url2')
-# insert_into_table('+345678902', 'Abbu2', 'url3')
-# insert_into_table('+3456789025', 'Abbu2', 'https://e.mail.ru/messages/folder/5/')
-# insert_into_table('+3456789026', 'Abbu2', 'https://e.mail.ru/messages/folder/6/')
-# insert_into_table('+345678902266', 'Abbu2', 'https://e.mail.ru/messages/folder/6/', \
-                  # '30 800 &', 'https://e.mail.ru/messages', 'bla bla')
+# Telegram
+def create_bd_telegram():
+    sql = """
+    CREATE TABLE if not exists telegram(
+        Id_external INTEGER,
+        Number VARCHAR(20) NOT NULL,
+        Name VARCHAR(100) NOT NULL,
+        Seen VARCHAR(30),
+        Profile VARCHAR(255),
+        CONSTRAINT unique_local UNIQUE (Number)
+        );
+    """
+    _exe_raw_sql(sql)
 
-# print filter_by_links(['1', 'url1', '2', 'url3', 'https://e.mail.ru/messages/folder/5/'])
-# print is_not_phone_exists('+345678901')
-# print is_not_phone_exists('+3456789')
-# print get_all()
+
+# ToDo Drop hardcore
+def insert_into_telegram(number, name, _id=1, seen=None, profile=None):
+    data = dict(zip(view_data_telegram, (_id, number, name, seen, profile)))
+
+    cols = ', '.join("'{}'".format(col) for col in data.keys())
+    vals = ', '.join(':{}'.format(col) for col in data.keys())
+    sql = 'INSERT INTO telegram ({}) VALUES ({})'.format(cols, vals)
+    try:
+        cursor.execute(sql, data)
+    except sqlite3.DatabaseError as err:
+        raise err
+    connect.commit()
+
+
+# ToDo change verification of Phone to verification of ID (id_external)
+def is_telegram_acount(phone):
+    """Return True or False"""
+
+    sql = "SELECT Number FROM telegram WHERE Number is '{}';".format(phone)
+    resp = _exe_raw_sql(sql)
+    return any(resp)
+
+
+def get_all_from_telegram():
+    sql = "SELECT * FROM telegram;"
+    return _exe_raw_sql(sql)
+
+
+def get_user_from_telegram(phone):
+    sql = "SELECT * FROM telegram WHERE Number is '{}';".format(phone)
+    return _exe_raw_sql(sql)
