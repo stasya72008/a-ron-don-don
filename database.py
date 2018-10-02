@@ -108,7 +108,7 @@ def create_bd_telegram():
     _exe_raw_sql(sql)
 
 
-# ToDo Drop hardcore
+# ToDo Drop hardcode
 def insert_into_telegram(number, name, _id=1, seen=None, profile=None):
     data = dict(zip(view_data_telegram, (_id, number, name, seen, profile)))
 

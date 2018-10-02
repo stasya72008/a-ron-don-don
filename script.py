@@ -3,7 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 
 from constants import *
-from waiters import element_has_attribute
+from helpers import ElementHasAttribute
 from database import create_bd, filter_by_links, insert_into_table, \
     is_not_phone_exists
 
@@ -44,7 +44,7 @@ for link in all_links_list:
     if show_phone_number:
         show_phone_number[1].click()
         if show_phone_number[1].get_attribute('style') != PHONE_NUMBER_VISIBLE:
-            WebDriverWait(driver, 20).until(element_has_attribute(
+            WebDriverWait(driver, 20).until(ElementHasAttribute(
                 (By.CSS_SELECTOR, SHOW_PHONE_NUMBER_CSS), 'style', PHONE_NUMBER_VISIBLE))
             phone_number = driver.find_elements_by_css_selector(PHONE_NUMBER_CSS)[1].text
 
