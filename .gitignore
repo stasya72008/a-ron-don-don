@@ -5,6 +5,8 @@ venv/
 *.log
 *.db
 *.csv
+*.exe
+*.xlsx
 config.ini
 
 # Distribution / packaging
