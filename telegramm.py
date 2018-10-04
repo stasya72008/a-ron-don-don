@@ -12,7 +12,7 @@ from selenium.common.exceptions import TimeoutException
 
 from constants import *
 from helpers import number_format
-from database import get_all, insert_into_telegram, is_telegram_acount, create_bd_telegram
+from database import get_all, insert_into_table, is_telegram_acount, create_bd_telegram
 
 create_bd_telegram()
 
@@ -55,7 +55,7 @@ for _line in get_all():
             try:
                 wait_err = WebDriverWait(driver, 3)
                 wait_err.until(EC.visibility_of_element_located((By.XPATH, ERROR_NOT_FOUND)))
-                insert_into_telegram(number, 'Not found')
+                insert_into_table(number, 'Not found', table='telegram')
                 driver.find_element_by_tag_name('body').send_keys(Keys.ESCAPE + Keys.ESCAPE + Keys.ESCAPE)
                 continue
             except TimeoutException:
@@ -92,7 +92,7 @@ for _line in get_all():
             except:
                 pass  # ignore
 
-            insert_into_telegram(number, user_name, seen=last_seen, profile=user_profile)
+            insert_into_table(number, user_name, last_seen, user_profile, table='telegram')
             print(user_name)
 
             driver.find_element_by_xpath(CLOSE).click()

@@ -7,7 +7,7 @@ telegram_output_file = "telegram_report.csv"
 delimiter = ','
 
 
-headers = view_data + ('Telegram Name', 'Last seen', 'Telegram Profile')
+headers = view_data + ('Telegram Name', 'Last seen', 'Telegram Profile', 'Processed')
 
 with open(telegram_output_file, 'w', encoding='cp1251') as csv_file:
     writer = csv.DictWriter(
@@ -23,12 +23,15 @@ with open(telegram_output_file, 'w', encoding='cp1251') as csv_file:
             # Addition telegram name, seen
             telegram_user = get_user_from_telegram(number_format(p_number))
             if telegram_user:
-                [profile_tmp.append(item) for item in telegram_user[0][2:-1]]
+                [profile_tmp.append(item) for item in telegram_user[0][1:-2]]
                 # Processing of profile
-                if telegram_user[0][-1]:
-                    profile_tmp.append(telegram_user[0][4]
+                if telegram_user[0][-2]:
+                    profile_tmp.append(telegram_user[0][-2]
                                        .replace('Username', '')
                                        .replace('About', '')
                                        .replace('\n', ' '))
+                else:
+                    profile_tmp.append(None)
+                profile_tmp.append(telegram_user[0][-1])
 
             writer.writerow(dict(zip(headers, profile_tmp)))

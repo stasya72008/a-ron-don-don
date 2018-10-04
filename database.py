@@ -15,11 +15,11 @@ view_data = (
     'Address')
 
 view_data_telegram = (
-    'Id_external',
     'Number',
     'Name',
     'Seen',
-    'Profile')
+    'Profile',
+    'Processed')
 
 
 # Common
@@ -52,15 +52,16 @@ def create_bd():
     _exe_raw_sql(sql)
 
 
-def insert_into_table(
-        number, name, link=None, price=None,
-        profile=None, information=None, address=None):
-    data = dict(zip(view_data,
-                    [number, name, link, price, profile, information, address]))
+def insert_into_table(*args, table='people'):
+    if table == 'people':
+        colons = view_data
+    elif table == 'telegram':
+        colons = view_data_telegram
+    data = dict(zip(colons, args))
 
     cols = ', '.join("'{}'".format(col) for col in data.keys())
     vals = ', '.join(':{}'.format(col) for col in data.keys())
-    sql = 'INSERT INTO people ({}) VALUES ({})'.format(cols, vals)
+    sql = 'INSERT INTO {} ({}) VALUES ({})'.format(table, cols, vals)
     try:
         cursor.execute(sql, data)
     except sqlite3.DatabaseError as err:
@@ -102,27 +103,13 @@ def create_bd_telegram():
         Name VARCHAR(100) NOT NULL,
         Seen VARCHAR(30),
         Profile VARCHAR(255),
+        Processed INTEGER,
         CONSTRAINT unique_local UNIQUE (Number)
         );
     """
     _exe_raw_sql(sql)
 
 
-# ToDo Drop hardcode
-def insert_into_telegram(number, name, _id=1, seen=None, profile=None):
-    data = dict(zip(view_data_telegram, (_id, number, name, seen, profile)))
-
-    cols = ', '.join("'{}'".format(col) for col in data.keys())
-    vals = ', '.join(':{}'.format(col) for col in data.keys())
-    sql = 'INSERT INTO telegram ({}) VALUES ({})'.format(cols, vals)
-    try:
-        cursor.execute(sql, data)
-    except sqlite3.DatabaseError as err:
-        raise err
-    connect.commit()
-
-
-# ToDo change verification of Phone to verification of ID (id_external)
 def is_telegram_acount(phone):
     """Return True or False"""
 
