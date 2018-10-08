@@ -98,7 +98,6 @@ def is_not_phone_exists(phone):
 def create_bd_telegram():
     sql = """
     CREATE TABLE if not exists telegram(
-        Id_external INTEGER,
         Number VARCHAR(20) NOT NULL,
         Name VARCHAR(100) NOT NULL,
         Seen VARCHAR(30),
@@ -124,5 +123,17 @@ def get_all_from_telegram():
 
 
 def get_user_from_telegram(phone):
-    sql = "SELECT * FROM telegram WHERE Number is '{}';".format(phone)
+    sql = "SELECT Name, Seen, Profile, Processed " \
+          "FROM telegram WHERE Number is '{}';".format(phone)
     return _exe_raw_sql(sql)
+
+
+def get_unprocessed_users():
+    sql = "SELECT Number FROM telegram " \
+          "WHERE Name IS NOT 'Not found' AND Processed IS NULL;"
+    return [item[0] for item in _exe_raw_sql(sql)]
+
+
+def set_user_processed(phone):
+    sql = "UPDATE telegram SET Processed=1 WHERE Number = '{}'".format(phone)
+    return [item[0] for item in _exe_raw_sql(sql)]

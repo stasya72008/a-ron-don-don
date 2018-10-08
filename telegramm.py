@@ -1,11 +1,7 @@
-import getpass
 import time
-
-from selenium import webdriver
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
@@ -14,42 +10,23 @@ from constants import *
 from helpers import number_format
 from database import get_all, insert_into_table, is_telegram_acount, create_bd_telegram
 
+from telegramm_page import add_number, go_to_telegram
+
 create_bd_telegram()
 
-username = getpass.getuser()
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument(
-    "--user-data-dir=C://Users/{}/AppData/Local/Google/Chrome/User Data".format(username))
-driver = webdriver.Chrome(chrome_options=chrome_options)
-driver.maximize_window()
+driver, wait = go_to_telegram()
 
-wait = WebDriverWait(driver, 10)
-
-driver.get(TELEGRAM_URL)
-time.sleep(20)
 
 for _line in get_all():
     for number in [number_format(item) for item in _line[0].split('\n')]:
-        # ToDo check by Id
         if is_telegram_acount(number):
             continue
 
+        print(number + '-' * 40)
         try:
+
             # Addition of phone number
-            print(number + '-' * 40)
-
-            driver.find_element_by_xpath(MENU).click()
-            wait.until(EC.visibility_of_element_located((By.XPATH, CONTACTS))).click()
-            driver.find_element_by_xpath(NEW_CONTACT).click()
-
-            actions = ActionChains(driver)
-            actions.move_to_element(driver.find_element_by_xpath(FIRST_NAME))
-            actions.click()
-            actions.move_to_element(driver.find_element_by_xpath(PHONE_NUMBER))
-            actions.click()
-            actions.send_keys(number + Keys.ENTER)
-            actions.perform()
-            actions.reset_actions()
+            add_number(driver, wait, number)
 
             # Error Verification
             try:
