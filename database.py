@@ -6,6 +6,7 @@ connect = sqlite3.connect(path_database)
 cursor = connect.cursor()
 
 view_data = (
+    'Id',
     'Number',
     'Name',
     'Link',
@@ -35,10 +36,10 @@ def _exe_raw_sql(sql):
 
 
 # People
-# ToDo add Id AUTOINCREMENT
 def create_bd():
     sql = """
     CREATE TABLE if not exists people(
+        Id INTEGER PRIMARY KEY UNIQUE,
         Number VARCHAR(255) NOT NULL,
         Name VARCHAR(255) NOT NULL,
         Link VARCHAR(255),
@@ -55,7 +56,7 @@ def create_bd():
 def insert_into_table(
         number, name, link=None, price=None,
         profile=None, information=None, address=None):
-    data = dict(zip(view_data,
+    data = dict(zip(view_data[1:],
                     [number, name, link, price, profile, information, address]))
 
     cols = ', '.join("'{}'".format(col) for col in data.keys())
