@@ -7,7 +7,7 @@ report_output_file = "report.csv"
 delimiter = ','
 
 
-headers = view_data + ('2-th ph', '3-th ph',)
+headers = view_data + ('2-nd ph', '3-rd ph', '4-th ph', '5-th ph', '6-th ph',)
 
 with open(report_output_file, 'w', encoding='cp1251') as csv_file:
     writer = csv.DictWriter(
@@ -16,10 +16,9 @@ with open(report_output_file, 'w', encoding='cp1251') as csv_file:
 
     for __line in get_all():
         _line = list(__line)
-        numbers = _line[0].split('\n')
-        _line[0] = number_format(numbers[0])
+        numbers = _line[1].split('\n')
+        _line[1] = number_format(numbers[0])
         if len(numbers) != 1:
             [_line.append(number_format(item)) for item in numbers[1:]]
 
         writer.writerow(dict(zip(headers, _line)))
-
