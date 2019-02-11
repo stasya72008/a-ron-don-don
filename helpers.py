@@ -5,6 +5,32 @@ def number_format(num):
     return num
 
 
+def logger_call():
+    """ Configure our logger """
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter(
+        '%(asctime)s -- %(module)s -- %(levelname)s -- %(message)s',
+        datefmt='%m/%d/%Y %H:%M:%S')
+
+    # Save log to file
+    file_handler = logging.FileHandler('a-ron-don-don.log')
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+
+    # Show log in console
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+    return logger
+
+
 class ElementHasAttribute(object):
     """An expectation for checking that an element has a particular attribute.
 
