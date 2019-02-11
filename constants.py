@@ -31,9 +31,7 @@ PROFILE_NAME = '//*[@class="peer_modal_profile_name"]'
 PROFILE_SEEN = '//*[@class="peer_modal_profile_description"]'
 PROFILE_DESCRIPTION = '//*[@class="md_modal_iconed_section_wrap md_modal_iconed_section_number"]'
 
-PROFILE_DESCRIPTION = '//*[@class="md_modal_iconed_section_wrap md_modal_iconed_section_number"]'
-
- # AUTO.RIA
+# AUTO.RIA
 RIA_PATH = """https://auto.ria.com/search/
 ?body.id[0]=3
 &categories.main.id=1
