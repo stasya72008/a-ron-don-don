@@ -9,7 +9,8 @@ import getpass
 import time
 
 
-from constants import *
+from constants import (TELEGRAM_URL, MENU, CONTACTS,
+                       FIRST_NAME, PHONE_NUMBER, NEW_CONTACT)
 
 
 def go_to_telegram():
