@@ -38,6 +38,7 @@ for i in range(1, pages_number + 1):
     all_links_list += filter_by_links(set(links_list))
 
 for link in all_links_list:
+
     driver.get(link)
 
     show_phone_number = driver.find_elements_by_css_selector(SHOW_PHONE_NUMBER_CSS)

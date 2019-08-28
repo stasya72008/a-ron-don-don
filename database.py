@@ -15,11 +15,11 @@ view_data = (
     'Address')
 
 view_data_telegram = (
-    'Id_external',
     'Number',
     'Name',
     'Seen',
-    'Profile')
+    'Profile',
+    'Processed')
 
 
 # Common
@@ -52,15 +52,16 @@ def create_bd():
     _exe_raw_sql(sql)
 
 
-def insert_into_table(
-        number, name, link=None, price=None,
-        profile=None, information=None, address=None):
-    data = dict(zip(view_data,
-                    [number, name, link, price, profile, information, address]))
+def insert_into_table(*args, table='people'):
+    if table == 'people':
+        colons = view_data
+    elif table == 'telegram':
+        colons = view_data_telegram
+    data = dict(zip(colons, args))
 
     cols = ', '.join("'{}'".format(col) for col in data.keys())
     vals = ', '.join(':{}'.format(col) for col in data.keys())
-    sql = 'INSERT INTO people ({}) VALUES ({})'.format(cols, vals)
+    sql = 'INSERT INTO {} ({}) VALUES ({})'.format(table, cols, vals)
     try:
         cursor.execute(sql, data)
     except sqlite3.DatabaseError as err:
@@ -109,32 +110,17 @@ def link_exists(link):
 def create_bd_telegram():
     sql = """
     CREATE TABLE if not exists telegram(
-        Id_external INTEGER,
         Number VARCHAR(20) NOT NULL,
         Name VARCHAR(100) NOT NULL,
         Seen VARCHAR(30),
         Profile VARCHAR(255),
+        Processed INTEGER,
         CONSTRAINT unique_local UNIQUE (Number)
         );
     """
     _exe_raw_sql(sql)
 
 
-# ToDo Drop hardcode
-def insert_into_telegram(number, name, _id=1, seen=None, profile=None):
-    data = dict(zip(view_data_telegram, (_id, number, name, seen, profile)))
-
-    cols = ', '.join("'{}'".format(col) for col in data.keys())
-    vals = ', '.join(':{}'.format(col) for col in data.keys())
-    sql = 'INSERT INTO telegram ({}) VALUES ({})'.format(cols, vals)
-    try:
-        cursor.execute(sql, data)
-    except sqlite3.DatabaseError as err:
-        raise err
-    connect.commit()
-
-
-# ToDo change verification of Phone to verification of ID (id_external)
 def is_telegram_acount(phone):
     """Return True or False"""
 
@@ -149,5 +135,17 @@ def get_all_from_telegram():
 
 
 def get_user_from_telegram(phone):
-    sql = "SELECT * FROM telegram WHERE Number is '{}';".format(phone)
+    sql = "SELECT Name, Seen, Profile, Processed " \
+          "FROM telegram WHERE Number is '{}';".format(phone)
     return _exe_raw_sql(sql)
+
+
+def get_unprocessed_users():
+    sql = "SELECT Number FROM telegram " \
+          "WHERE Name IS NOT 'Not found' AND Processed IS NULL;"
+    return [item[0] for item in _exe_raw_sql(sql)]
+
+
+def set_user_processed(phone):
+    sql = "UPDATE telegram SET Processed=1 WHERE Number = '{}'".format(phone)
+    return [item[0] for item in _exe_raw_sql(sql)]

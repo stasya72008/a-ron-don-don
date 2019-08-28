@@ -33,6 +33,8 @@ CLOSE = '//*[@class="md_modal_action md_modal_action_close"]'
 PROFILE_NAME = '//*[@class="peer_modal_profile_name"]'
 PROFILE_SEEN = '//*[@class="peer_modal_profile_description"]'
 PROFILE_DESCRIPTION = '//*[@class="md_modal_iconed_section_wrap md_modal_iconed_section_number"]'
+TEXT_AREA = '//*[@class="composer_rich_textarea"]'
+BUTTON_SEND = '//*[@class="im_submit_send_label nocopy"]'
 
 # AUTO.RIA
 RIA_PATH = """https://auto.ria.com/search/
