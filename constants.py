@@ -1,3 +1,7 @@
+from selenium.webdriver.common.by import By
+
+LOG_NAME = 'a-ron-don-don.log'
+
 # OLX
 URL_PATH = 'https://www.olx.ua/transport/legkovye-avtomobili/?search%5Bfilter_float_price%3Afrom%5D=1500000'
 
@@ -31,3 +35,22 @@ PROFILE_SEEN = '//*[@class="peer_modal_profile_description"]'
 PROFILE_DESCRIPTION = '//*[@class="md_modal_iconed_section_wrap md_modal_iconed_section_number"]'
 TEXT_AREA = '//*[@class="composer_rich_textarea"]'
 BUTTON_SEND = '//*[@class="im_submit_send_label nocopy"]'
+
+# AUTO.RIA
+RIA_PATH = """https://auto.ria.com/search/
+?body.id[0]=3
+&categories.main.id=1
+&price.USD.gte=200000
+&price.currency=1
+&abroad.not=0
+&custom.not=1
+&size=100"""
+RIA_RESULTS = (By.ID, 'staticResultsCount')
+RIA_TICKETS = (By.CLASS_NAME, 'm-link-ticket')
+RIA_NAME = (By.XPATH, '//*[@id="userInfoBlock"]/div[1]/div/h4')
+RIA_NUMBER = (By.CLASS_NAME, 'phone')
+RIA_PRICE = (By.XPATH, '//*[@id="showLeftBarView"]/section[1]/div[1]/strong')
+RIA_PROFILE = (By.CLASS_NAME, 'seller_info_name')
+RIA_ADDRESS = (By.CLASS_NAME, 'item_inner')
+RIA_DESCRIPTION = (By.XPATH, '//*[@id="heading-cars"]/div/h1')
+RIA_THREAD_COUNT = 5
