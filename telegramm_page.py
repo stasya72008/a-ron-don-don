@@ -17,18 +17,15 @@ def go_to_telegram():
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     username = getpass.getuser()
-    # chrome_options.add_argument("--user-data-dir=C://Users/{}/AppData/Local/Google/Chrome/User Data".format(username))
-
-    chrome_options.add_argument("--user-data-dir=C://Users/TEMP.SOFTSERVE.000/AppData/Local/Google/Chrome/User Data")
+    chrome_options.add_argument("--user-data-dir=C://Users/{}/AppData/Local/Google/Chrome/User Data".format(username))
 
     driver = webdriver.Chrome(chrome_options=chrome_options)
-    driver.maximize_window()
-
-    wait = WebDriverWait(driver, 10)
 
     driver.get(TELEGRAM_URL)
     time.sleep(10)
+    driver.maximize_window()
 
+    wait = WebDriverWait(driver, 10)
     return driver, wait
 
 
